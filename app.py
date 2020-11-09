@@ -1,14 +1,7 @@
 from flask import Flask
 import psycopg2
 from psycopg2 import sql
-
-conf_host = 'localhost'
-conf_port = 37780
-conf_db_name = 'school'
-conf_user = 'postgres'
-conf_password = 'password'
-conf_teachers_table = 'teachers'
-
+import argparse
 
 def connect_to_db():
     """
@@ -71,5 +64,21 @@ def create_app():
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument("host", type=str, help="Host of database")
+    parser.add_argument("port", type=str, help="Database port")
+    parser.add_argument("database", type=str, help="Postgres database name")
+    parser.add_argument("user", type=str, help="Postgres database username")
+    parser.add_argument("password", type=str, help="Postgres database password")
+    parser.add_argument("table", type=str, help="Table to retrieve aggregation from")
+    args = parser.parse_args()
+
+    conf_host = args.host
+    conf_port = args.port
+    conf_db_name = args.database
+    conf_user = args.user
+    conf_password = args.password
+    conf_teachers_table = args.table
+
     app = create_app()
     app.run(host='0.0.0.0')
